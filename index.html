@@ -1,10 +1,14 @@
+Here's the complete, updated HTML file with all the changes, including the **Jinx** champion entry and the matchup picker functionality.
+
+Just copy this entire code block and save it as an `.html` file (e.g., `wildrift_gallery.html`).
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wild Rift Champion Skins Gallery</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -233,6 +237,68 @@
             transform: scale(1.1);
         }
 
+        /* Styles for the Matchup Picker */
+        .matchup-picker-section {
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .matchup-picker-section label {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .matchup-picker-section select {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1.1rem;
+            width: 100%;
+            max-width: 300px;
+            appearance: none; /* Remove default select arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .matchup-picker-section select:focus {
+            border-color: #a855f7;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .matchup-picker-section select option {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+        }
+
+        /* Style for the "Back to All Champions" button */
+        #reset-matchup-button {
+            background-color: #6366f1; /* Purple */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: none; /* Hidden by default */
+        }
+
+        #reset-matchup-button:hover {
+            background-color: #4f53d0;
+            transform: translateY(-2px);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             h1 {
@@ -267,6 +333,13 @@
             }
             .close-button {
                 font-size: 1.8rem;
+            }
+            .matchup-picker-section label {
+                font-size: 1.2rem;
+            }
+            .matchup-picker-section select {
+                font-size: 1rem;
+                padding: 0.6rem 0.8rem;
             }
         }
 
@@ -312,12 +385,18 @@
         <br>Main Role: Top 
         <br>Secondary: ADC </h4>
         
-        <div id="gallery-container">
-            <!-- Champion sections will be dynamically loaded here -->
+        <div class="matchup-picker-section">
+            <label for="enemy-champion-select">Select Enemy Champion for Matchup:</label>
+            <select id="enemy-champion-select">
+                <option value="">-- Select a Champion --</option>
+                </select>
+            <button id="reset-matchup-button">Back to All Champions</button>
         </div>
+        
+        <div id="gallery-container">
+            </div>
     </div>
 
-    <!-- Modal Structure -->
     <div id="skin-modal" class="modal">
         <div class="modal-content">
             <button class="close-button" id="close-modal">&times;</button>
@@ -370,8 +449,8 @@
             { role: 'ADC', name: 'Kai\'Sa', skin: 'Lagoon', imageUrl: 'https://turbosmurfs.gg/storage/splash/Kaisa_29.jpg'},
             { role: 'ADC', name: 'Tristana', skin: 'Dragon Trainer', imageUrl: 'https://wiki.leagueoflegends.com/en-us/images/Tristana_DragonTrainerSkin.jpg?9e9b1'},
             { role: 'ADC', name: 'Ashe', skin: 'High Noon', imageUrl: 'https://turbosmurfs.gg/storage/splash/Ashe_17.jpg'},
-            { role: 'ADC', name: 'Samira', skin: 'Soulfighter', imageUrl: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Samira_30.jpg'},
-            { role: 'ADC', name: 'Ezreal', skin: 'Battle Academia', imageUrl: 'https://turbosmurfs.gg/storage/splash/Ezreal_21.jpg'}, // Changed from Frosted Ezreal
+            { role: 'ADC', name: 'Jinx', skin: 'Star Guardian', imageUrl: 'https://turbosmurfs.gg/storage/splash/Jinx_4.jpg'}, // Replaced Samira with Jinx
+            { role: 'ADC', name: 'Ezreal', skin: 'Battle Academia', imageUrl: 'https://turbosmurfs.gg/storage/splash/Ezreal_21.jpg'},
             { role: 'ADC', name: 'Vayne', skin: 'Sentinel', imageUrl: 'https://r2.rankedkings.com/lol/splashes/67025.jpg'},
             { role: 'ADC', name: 'Jhin', skin: 'Blood Moon', imageUrl: 'https://preview.redd.it/6ewt085xd7131.jpg?auto=webp&s=01fbb7d4db7699e59ed0843eb49321b79320fbe9'},
 
@@ -379,8 +458,81 @@
             { role: 'Support', name: 'Pyke', skin: 'Sand Wraith', imageUrl: 'https://r2.rankedkings.com/lol/splashes/555001.jpg'},
             { role: 'Support', name: 'Karma', skin: 'Dawnbringer', imageUrl: 'https://www.riotgames.com/darkroom/1000/d8b51b2811cd8adc74b21cd14cbd3bee:5d689f36d8a785e81e1196a151b9c09c/00-karma-header.png'},
             { role: 'Support', name: 'Thresh', skin: 'Spirit Blossom', imageUrl: 'https://turbosmurfs.gg/storage/splash/Thresh_17.jpg'},
-            { role: 'Support', name: 'Zyra', skin: 'Coven', imageUrl: 'https://turbosmurfs.gg/storage/splash/Zyra_5.jpg'} // Replaced Sett with Coven Zyra
+            { role: 'Support', name: 'Zyra', skin: 'Coven', imageUrl: 'https://turbosmurfs.gg/storage/splash/Zyra_5.jpg'}
         ];
+
+        // All possible Wild Rift champions for the matchup picker
+        const allWildRiftChampions = [
+            "AATROX", "AHRI", "AKALI", "AKSHAN", "ALISTAR", "AMBESSA", "AMUMU", "ANNIE", "ASHE", "AURELION SOL",
+            "BLITZCRANK", "BRAND", "BRAUM", "CAITLYN", "CAMILLE", "CORKI", "DARIUS", "DIANA", "DR. MUNDO", "DRAVEN",
+            "EKKO", "EVELYNN", "EZREAL", "FIDDLESTICKS", "FIORA", "FIZZ", "GALIO", "GAREN", "GNAR", "GRAGAS",
+            "GRAVES", "GWEN", "HECARIM", "HEIMERDINGER", "IRELIA", "JANNA", "JARVAN IV", "JAX", "JAYCE", "JHIN",
+            "JINX", "KAI'SA", "KALISTA", "KARMA", "KASSADIN", "KATARINA", "KAYLE", "KAYN", "KENNEN", "KHA'ZIX",
+            "KINDRED", "LEE SIN", "LEONA", "LILLIA", "LISSANDRA", "LUCIAN", "LULU", "LUX", "MALPHITE", "MAOKAI",
+            "MASTER YI", "MILIO", "MISS FORTUNE", "MORDEKAISER", "MORGANA", "NAMI", "NASUS", "NAUTILUS", "NILAH", "NOCTURNE",
+            "NUNU & WILLUMP", "OLAF", "ORIANNA", "ORNN", "PANTHEON", "POPPY", "PYKE", "RAKAN", "RAMMUS", "RENEKTON",
+            "RENGAR", "RIVEN", "RUMBLE", "RYZE", "SAMIRA", "SENNA", "SERAPHINE", "SETT", "SHEN", "SHYVANA",
+            "SINGED", "SION", "SIVIR", "SONA", "SORAKA", "SWAIN", "SYNDRA", "TALON", "TEEMO", "THRESH",
+            "TRISTANA", "TRYNDAMERE", "TWISTED FATE", "TWITCH", "URGOT", "VARUS", "VAYNE", "VEIGAR", "VEX", "VI",
+            "VIEGO", "VIKTOR", "VLADIMIR", "VOLIBEAR", "WARWICK", "WUKONG", "XAYAH", "XIN ZHAO", "YASUO", "YONE",
+            "YUUMI", "ZED", "ZERI", "ZIGGS", "ZILEAN", "ZOE"
+        ].sort(); // Sort alphabetically for the dropdown
+
+        // Matchup data: Maps enemy champion (lowercase) to an array of YOUR champion names (from 'champions' array) that are good picks.
+        // You will need to populate this data based on your own knowledge and preferences.
+        // Example structure: 'enemyChampionName': ['YourGoodPick1', 'YourGoodPick2']
+        const matchupData = {
+            'aatrox': ['Gwen', 'Jax', 'Fiora'],
+            'ahri': ['Zed', 'Katarina', 'Fizz'],
+            'akali': ['Yasuo', 'Katarina', 'Fizz'],
+            'ashe': ['Jinx', 'Kai\'Sa', 'Ezreal'], // Updated for Jinx
+            'blitzcrank': ['Morgana', 'Thresh', 'Alistar'],
+            'camille': ['Jax', 'Gwen', 'Fiora'],
+            'darius': ['Gwen', 'Kayle', 'Teemo'],
+            'diana': ['Yasuo', 'Zed', 'Akali'],
+            'ezreal': ['Jinx', 'Vayne', 'Jhin'], // Updated for Jinx
+            'fiora': ['Gwen', 'Jax', 'Camille'],
+            'garen': ['Kayle', 'Teemo', 'Gwen'],
+            'graves': ['Shyvanna', 'Xin Zhao', 'Kha\'Zix'],
+            'gwen': ['Jax', 'Camille', 'Irelia'],
+            'irelia': ['Jax', 'Renekton', 'Gwen'],
+            'jhin': ['Jinx', 'Kai\'Sa', 'Ezreal'], // Updated for Jinx
+            'jinx': ['Varus', 'Kai\'Sa', 'Vayne'], // Example counter for Jinx
+            'kaisa': ['Jinx', 'Vayne', 'Tristana'], // Updated for Jinx
+            'katarina': ['Orianna', 'Zed', 'Fizz'],
+            'kayle': ['Gwen', 'Camille', 'Irelia'],
+            'kayn': ['Evelynn', 'Xin Zhao', 'Kha\'Zix'],
+            'kennen': ['Irelia', 'Camille', 'Jax'],
+            'kha\'zix': ['Xin Zhao', 'Evelynn', 'Kayn'],
+            'lee sin': ['Xin Zhao', 'Kha\'Zix', 'Kayn'],
+            'lucian': ['Vayne', 'Jinx', 'Jhin'], // Updated for Jinx
+            'lux': ['Zed', 'Fizz', 'Katarina'],
+            'master yi': ['Jax', 'Wukong', 'Xin Zhao'],
+            'miss fortune': ['Kai\'Sa', 'Jinx', 'Tristana'], // Updated for Jinx
+            'morgana': ['Thresh', 'Karma', 'Pyke'],
+            'nautilus': ['Morgana', 'Thresh', 'Karma'],
+            'olaf': ['Gwen', 'Kayle', 'Camille'],
+            'orianna': ['Zed', 'Fizz', 'Yasuo'],
+            'pyke': ['Thresh', 'Braum', 'Karma'],
+            'riven': ['Gwen', 'Jax', 'Camille'],
+            'samira': ['Kai\'Sa', 'Vayne', 'Jinx'], // Added Jinx as a counter for Samira
+            'sett': ['Gwen', 'Kayle', 'Camille'],
+            'shyvana': ['Xin Zhao', 'Kayn', 'Evelynn'],
+            'teemo': ['Irelia', 'Camille', 'Akali'],
+            'thresh': ['Morgana', 'Braum', 'Karma'],
+            'tristana': ['Vayne', 'Ezreal', 'Jinx'], // Updated for Jinx
+            'varus': ['Kai\'Sa', 'Jinx', 'Ezreal'], // Updated for Jinx
+            'vayne': ['Jhin', 'Ashe', 'Ezreal'],
+            'viego': ['Xin Zhao', 'Kha\'Zix', 'Kayn'],
+            'wukong': ['Gwen', 'Jax', 'Camille'],
+            'xinzhao': ['Shyvanna', 'Kha\'Zix', 'Kayn'],
+            'yasuo': ['Irelia', 'Katarina', 'Zed'],
+            'yone': ['Zed', 'Katarina', 'Fizz'],
+            'zed': ['Orianna', 'Fizz', 'Katarina'],
+            'zoe': ['Fizz', 'Zed', 'Katarina'],
+            'zyra': ['Thresh', 'Karma', 'Pyke']
+            // Add more matchups here!
+        };
 
         const galleryContainer = document.getElementById('gallery-container');
         const skinModal = document.getElementById('skin-modal');
@@ -389,6 +541,8 @@
         const modalSkinName = document.getElementById('modal-skin-name');
         const modalRole = document.getElementById('modal-role');
         const closeModalButton = document.getElementById('close-modal');
+        const enemyChampionSelect = document.getElementById('enemy-champion-select');
+        const resetMatchupButton = document.getElementById('reset-matchup-button');
 
         // Function to generate a random rotation degree
         function getRandomRotation() {
@@ -400,19 +554,28 @@
             return Math.floor(Math.random() * 5); // 0 to 4
         }
 
-        // Function to render the gallery
-        function renderGallery() {
+        // Function to render the gallery based on a filtered list of champions
+        function renderGallery(filteredChampions = champions) {
+            galleryContainer.innerHTML = ''; // Clear existing content
+
             // Group champions by role
             const roles = {};
-            champions.forEach(champ => {
+            filteredChampions.forEach(champ => {
                 if (!roles[champ.role]) {
                     roles[champ.role] = [];
                 }
                 roles[champ.role].push(champ);
             });
 
+            // Get a sorted list of roles
+            const sortedRoles = Object.keys(roles).sort((a, b) => {
+                // Custom sort order for roles if desired, otherwise alphabetical
+                const order = ['Toplane', 'Jungle', 'Midlane', 'ADC', 'Support'];
+                return order.indexOf(a) - order.indexOf(b);
+            });
+
             // Iterate over roles and create sections
-            for (const role in roles) {
+            sortedRoles.forEach(role => {
                 const roleSection = document.createElement('div');
                 roleSection.className = 'role-section';
 
@@ -424,7 +587,8 @@
                 const skinGrid = document.createElement('div');
                 skinGrid.className = 'skin-grid';
 
-                roles[role].forEach(champ => {
+                // Sort champions within each role alphabetically by name
+                roles[role].sort((a, b) => a.name.localeCompare(b.name)).forEach(champ => {
                     const skinCard = document.createElement('div');
                     // Apply random rotation and z-index directly via style
                     skinCard.className = `skin-card`;
@@ -461,23 +625,54 @@
                 });
                 roleSection.appendChild(skinGrid);
                 galleryContainer.appendChild(roleSection);
-            }
+            });
         }
 
-        // Event listener to close the modal
-        closeModalButton.addEventListener('click', () => {
-            skinModal.classList.remove('open');
-        });
+        // Function to populate the enemy champion select dropdown
+        function populateEnemyChampionSelect() {
+            allWildRiftChampions.forEach(champ => {
+                const option = document.createElement('option');
+                option.value = champ.toLowerCase(); // Use lowercase for consistency with matchupData
+                option.textContent = champ;
+                enemyChampionSelect.appendChild(option);
+            });
+        }
 
-        // Close modal when clicking outside the content
-        skinModal.addEventListener('click', (event) => {
-            if (event.target === skinModal) {
-                skinModal.classList.remove('open');
+        // Event listener for the enemy champion select dropdown
+        enemyChampionSelect.addEventListener('change', (event) => {
+            const selectedEnemyChampion = event.target.value;
+            if (selectedEnemyChampion) {
+                const recommendedPicks = matchupData[selectedEnemyChampion];
+                if (recommendedPicks && recommendedPicks.length > 0) {
+                    const filteredChampions = champions.filter(champ => 
+                        recommendedPicks.includes(champ.name)
+                    );
+                    renderGallery(filteredChampions);
+                    resetMatchupButton.style.display = 'block'; // Show the reset button
+                } else {
+                    galleryContainer.innerHTML = '<p class="text-center text-lg text-gray-400">No specific counter picks from your roster for this champion. Showing all your champions.</p>';
+                    renderGallery(champions); // Show all if no specific picks defined
+                    resetMatchupButton.style.display = 'block'; // Still show reset button
+                }
+            } else {
+                renderGallery(champions); // Show all champions if "Select a Champion" is chosen
+                resetMatchupButton.style.display = 'none'; // Hide the reset button
             }
         });
 
-        // Render the gallery when the page loads
-        window.onload = renderGallery;
+        // Event listener for the "Back to All Champions" button
+        resetMatchupButton.addEventListener('click', () => {
+            enemyChampionSelect.value = ''; // Reset the dropdown
+            renderGallery(champions); // Render all champions
+            resetMatchupButton.style.display = 'none'; // Hide the button
+        });
+
+        // Render the gallery and populate the dropdown when the page loads
+        window.onload = () => {
+            populateEnemyChampionSelect();
+            renderGallery();
+        };
     </script>
 </body>
 </html>
+```
