@@ -1,8 +1,3 @@
-Here's the complete, updated HTML file with all the changes, including the **Jinx** champion entry and the matchup picker functionality.
-
-Just copy this entire code block and save it as an `.html` file (e.g., `wildrift_gallery.html`).
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,15 +89,24 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             opacity: 0.7;
         }
 
+        .hard-counter-title {
+            color: #ff4d4d; /* Red for hard counter */
+            text-shadow: 0 0 12px rgba(255, 77, 77, 0.6);
+            border-color: rgba(255, 77, 77, 0.3);
+        }
+        .hard-counter-title::before {
+            background: linear-gradient(90deg, transparent, #ff4d4d, transparent);
+        }
+
 
         .skin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjusted min size for more cards */
-            gap: 0.5rem; /* Reduced gap for "next to each other" feel with overlaps */
+            /* Adjust minmax to allow more cards per row based on screen size */
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem; /* Adjusted gap for better spacing */
             justify-content: center;
             align-items: stretch; /* Ensure cards stretch to fill grid area */
             padding: 0.5rem 0; /* Slight vertical padding for the grid */
-            /* Removed grid specific properties that conflict with free placement */
         }
 
         .skin-card {
@@ -311,7 +315,7 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             }
             .skin-grid {
                 grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Further adjustment for smaller screens */
-                gap: 0.6rem; /* Even smaller gap */
+                gap: 0.8rem;
             }
             .skin-card img {
                 height: 160px;
@@ -353,7 +357,7 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             }
             .skin-grid {
                 grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smallest screen adjustment */
-                gap: 0.5rem;
+                gap: 0.6rem;
             }
             .skin-card img {
                 height: 140px;
@@ -382,9 +386,9 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
 
         <h4>Player: HAZE
         <br>Server: EUW
-        <br>Main Role: Top 
+        <br>Main Role: Top
         <br>Secondary: ADC </h4>
-        
+
         <div class="matchup-picker-section">
             <label for="enemy-champion-select">Select Enemy Champion for Matchup:</label>
             <select id="enemy-champion-select">
@@ -392,7 +396,7 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
                 </select>
             <button id="reset-matchup-button">Back to All Champions</button>
         </div>
-        
+
         <div id="gallery-container">
             </div>
     </div>
@@ -421,7 +425,7 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             { role: 'Toplane', name: 'Kennen', skin: 'Super Kennen', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/kennen/skins/skin07/images/kennen_splash_centered_7.jpg'},
             { role: 'Toplane', name: 'Camille', skin: 'Stargazer', imageUrl: 'https://i.redd.it/r9dey83x3rs61.jpg'},
             { role: 'Toplane', name: 'Jax', skin: 'Stargazer', imageUrl: 'https://i.redd.it/stargazer-jax-3d-model-wild-rift-rumor-legendary-v0-oesfuyt87zlb1.jpg?width=1918&format=pjpg&auto=webp&s=5f9379d341b11afdabb245c551cc5bcffa6316fe'}, // Placeholder for local file
-            { role: 'Toplane', name: 'Irelia', skin: 'Divine Sword', imageUrl: 'https://cdna.artstation.com/p/assets/images/images/012/706/196/large/bo-chen-irelia-1920pix.jpg?1536109325'},
+            { role: 'Toplane', name: 'Fiora', skin: 'Lunar Beast', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/fiora/skins/skin50/images/fiora_splash_centered_50.jpg'},
             { role: 'Toplane', name: 'Akali', skin: 'K/DA', imageUrl: 'https://i.pinimg.com/originals/e5/f0/07/e5f007778c849bf1e28820ed0e30d0d9.jpg'},
 
             // Jungle
@@ -478,61 +482,65 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             "YUUMI", "ZED", "ZERI", "ZIGGS", "ZILEAN", "ZOE"
         ].sort(); // Sort alphabetically for the dropdown
 
-        // Matchup data: Maps enemy champion (lowercase) to an array of YOUR champion names (from 'champions' array) that are good picks.
-        // You will need to populate this data based on your own knowledge and preferences.
-        // Example structure: 'enemyChampionName': ['YourGoodPick1', 'YourGoodPick2']
+        // Matchup data: Maps enemy champion (lowercase) to an object with 'normal' and 'hard_counter' arrays.
+        // If only 'normal' picks exist, you can just use ['YourGoodPick1', ...] directly as before.
+        // The script will adapt.
         const matchupData = {
             'aatrox': ['Gwen', 'Jax', 'Fiora'],
             'ahri': ['Zed', 'Katarina', 'Fizz'],
             'akali': ['Yasuo', 'Katarina', 'Fizz'],
-            'ashe': ['Jinx', 'Kai\'Sa', 'Ezreal'], // Updated for Jinx
+            'ashe': ['Jinx', 'Kai\'Sa', 'Ezreal'],
             'blitzcrank': ['Morgana', 'Thresh', 'Alistar'],
             'camille': ['Jax', 'Gwen', 'Fiora'],
             'darius': ['Gwen', 'Kayle', 'Teemo'],
             'diana': ['Yasuo', 'Zed', 'Akali'],
-            'ezreal': ['Jinx', 'Vayne', 'Jhin'], // Updated for Jinx
+            'ezreal': ['Jinx', 'Vayne', 'Jhin'],
             'fiora': ['Gwen', 'Jax', 'Camille'],
             'garen': ['Kayle', 'Teemo', 'Gwen'],
             'graves': ['Shyvanna', 'Xin Zhao', 'Kha\'Zix'],
             'gwen': ['Jax', 'Camille', 'Irelia'],
             'irelia': ['Jax', 'Renekton', 'Gwen'],
-            'jhin': ['Jinx', 'Kai\'Sa', 'Ezreal'], // Updated for Jinx
-            'jinx': ['Varus', 'Kai\'Sa', 'Vayne'], // Example counter for Jinx
-            'kaisa': ['Jinx', 'Vayne', 'Tristana'], // Updated for Jinx
+            'jhin': ['Jinx', 'Kai\'Sa', 'Ezreal'],
+            'jinx': ['Varus', 'Kai\'Sa', 'Vayne'],
+            'kaisa': ['Jinx', 'Vayne', 'Tristana'],
             'katarina': ['Orianna', 'Zed', 'Fizz'],
             'kayle': ['Gwen', 'Camille', 'Irelia'],
             'kayn': ['Evelynn', 'Xin Zhao', 'Kha\'Zix'],
             'kennen': ['Irelia', 'Camille', 'Jax'],
             'kha\'zix': ['Xin Zhao', 'Evelynn', 'Kayn'],
             'lee sin': ['Xin Zhao', 'Kha\'Zix', 'Kayn'],
-            'lucian': ['Vayne', 'Jinx', 'Jhin'], // Updated for Jinx
+            'lucian': ['Vayne', 'Jinx', 'Jhin'],
             'lux': ['Zed', 'Fizz', 'Katarina'],
             'master yi': ['Jax', 'Wukong', 'Xin Zhao'],
-            'miss fortune': ['Kai\'Sa', 'Jinx', 'Tristana'], // Updated for Jinx
+            'miss fortune': ['Kai\'Sa', 'Jinx', 'Tristana'],
             'morgana': ['Thresh', 'Karma', 'Pyke'],
             'nautilus': ['Morgana', 'Thresh', 'Karma'],
             'olaf': ['Gwen', 'Kayle', 'Camille'],
             'orianna': ['Zed', 'Fizz', 'Yasuo'],
             'pyke': ['Thresh', 'Braum', 'Karma'],
             'riven': ['Gwen', 'Jax', 'Camille'],
-            'samira': ['Kai\'Sa', 'Vayne', 'Jinx'], // Added Jinx as a counter for Samira
+            'samira': ['Kai\'Sa', 'Vayne', 'Jinx'],
             'sett': ['Gwen', 'Kayle', 'Camille'],
             'shyvana': ['Xin Zhao', 'Kayn', 'Evelynn'],
             'teemo': ['Irelia', 'Camille', 'Akali'],
             'thresh': ['Morgana', 'Braum', 'Karma'],
-            'tristana': ['Vayne', 'Ezreal', 'Jinx'], // Updated for Jinx
-            'varus': ['Kai\'Sa', 'Jinx', 'Ezreal'], // Updated for Jinx
+            'tristana': ['Vayne', 'Ezreal', 'Jinx'],
+            'varus': ['Kai\'Sa', 'Jinx', 'Ezreal'],
             'vayne': ['Jhin', 'Ashe', 'Ezreal'],
             'viego': ['Xin Zhao', 'Kha\'Zix', 'Kayn'],
             'wukong': ['Gwen', 'Jax', 'Camille'],
             'xinzhao': ['Shyvanna', 'Kha\'Zix', 'Kayn'],
             'yasuo': ['Irelia', 'Katarina', 'Zed'],
             'yone': ['Zed', 'Katarina', 'Fizz'],
-            'zed': ['Orianna', 'Fizz', 'Katarina'],
+            'zed': { // Example with hard counter
+                'normal': ['Orianna', 'Fizz', 'Katarina'],
+                'hard_counter': ['Yasuo']
+            },
             'zoe': ['Fizz', 'Zed', 'Katarina'],
             'zyra': ['Thresh', 'Karma', 'Pyke']
-            // Add more matchups here!
+            // Add more matchups here, using the 'normal' and 'hard_counter' structure if needed
         };
+
 
         const galleryContainer = document.getElementById('gallery-container');
         const skinModal = document.getElementById('skin-modal');
@@ -554,78 +562,104 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             return Math.floor(Math.random() * 5); // 0 to 4
         }
 
+        // Function to render a section of champions (either normal or hard counter)
+        function renderChampionSection(title, championsList, isHardCounter = false) {
+            if (championsList.length === 0) return; // Don't render empty sections
+
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'role-section';
+
+            const sectionTitle = document.createElement('h2');
+            sectionTitle.className = `role-title ${isHardCounter ? 'hard-counter-title' : ''}`;
+            sectionTitle.textContent = title;
+            sectionDiv.appendChild(sectionTitle);
+
+            const skinGrid = document.createElement('div');
+            skinGrid.className = 'skin-grid';
+
+            // Sort champions alphabetically by name for consistency
+            championsList.sort((a, b) => a.name.localeCompare(b.name)).forEach(champ => {
+                const skinCard = document.createElement('div');
+                skinCard.className = `skin-card`;
+                skinCard.style.transform = `rotate(${getRandomRotation()}deg)`;
+                skinCard.style.zIndex = getRandomZIndex();
+                skinCard.style.marginLeft = `${(Math.random() * 10) - 5}px`;
+                skinCard.style.marginTop = `${(Math.random() * 10) - 5}px`;
+
+                skinCard.dataset.champion = champ.name;
+                skinCard.dataset.skin = champ.skin;
+                skinCard.dataset.role = champ.role;
+                skinCard.dataset.imageUrl = champ.imageUrl;
+
+                skinCard.innerHTML = `
+                    <img src="${champ.imageUrl}" alt="${champ.skin} ${champ.name} Splash Art" onerror="this.onerror=null;this.src='https://placehold.co/400x600/666/e0e0e0?text=Image+Unavailable';">
+                    <div class="skin-info">
+                        <h3>${champ.name}</h3>
+                        <p>${champ.skin}</p>
+                    </div>
+                `;
+                skinGrid.appendChild(skinCard);
+
+                skinCard.addEventListener('click', () => {
+                    modalImage.src = champ.imageUrl;
+                    modalImage.alt = `${champ.skin} ${champ.name} Splash Art`;
+                    modalChampionName.textContent = champ.name;
+                    modalSkinName.textContent = champ.skin;
+                    modalRole.textContent = `Role: ${champ.role}`;
+                    skinModal.classList.add('open');
+                });
+            });
+            sectionDiv.appendChild(skinGrid);
+            galleryContainer.appendChild(sectionDiv);
+        }
+
         // Function to render the gallery based on a filtered list of champions
-        function renderGallery(filteredChampions = champions) {
+        function renderGallery(filteredChampions = champions, showMatchupSpecific = false, matchupInfo = null) {
             galleryContainer.innerHTML = ''; // Clear existing content
 
-            // Group champions by role
-            const roles = {};
-            filteredChampions.forEach(champ => {
-                if (!roles[champ.role]) {
-                    roles[champ.role] = [];
+            if (showMatchupSpecific && matchupInfo) {
+                // Render Hard Counter section first if available
+                if (matchupInfo.hard_counter && matchupInfo.hard_counter.length > 0) {
+                    const hardCounterChamps = champions.filter(champ =>
+                        matchupInfo.hard_counter.includes(champ.name)
+                    );
+                    renderChampionSection('Hard Counter Picks', hardCounterChamps, true);
                 }
-                roles[champ.role].push(champ);
-            });
 
-            // Get a sorted list of roles
-            const sortedRoles = Object.keys(roles).sort((a, b) => {
-                // Custom sort order for roles if desired, otherwise alphabetical
-                const order = ['Toplane', 'Jungle', 'Midlane', 'ADC', 'Support'];
-                return order.indexOf(a) - order.indexOf(b);
-            });
+                // Render Normal Counter Picks if available
+                if (matchupInfo.normal && matchupInfo.normal.length > 0) {
+                    const normalCounterChamps = champions.filter(champ =>
+                        matchupInfo.normal.includes(champ.name)
+                    );
+                    renderChampionSection('Recommended Picks', normalCounterChamps);
+                }
 
-            // Iterate over roles and create sections
-            sortedRoles.forEach(role => {
-                const roleSection = document.createElement('div');
-                roleSection.className = 'role-section';
+                if ((!matchupInfo.normal || matchupInfo.normal.length === 0) && (!matchupInfo.hard_counter || matchupInfo.hard_counter.length === 0)) {
+                    galleryContainer.innerHTML = '<p class="text-center text-lg text-gray-400">No specific counter picks from your roster for this champion. Showing all your champions.</p>';
+                    renderGallery(champions, false); // Fallback to showing all if no specific picks
+                }
 
-                const roleTitle = document.createElement('h2');
-                roleTitle.className = 'role-title';
-                roleTitle.textContent = role + ' Champions';
-                roleSection.appendChild(roleTitle);
-
-                const skinGrid = document.createElement('div');
-                skinGrid.className = 'skin-grid';
-
-                // Sort champions within each role alphabetically by name
-                roles[role].sort((a, b) => a.name.localeCompare(b.name)).forEach(champ => {
-                    const skinCard = document.createElement('div');
-                    // Apply random rotation and z-index directly via style
-                    skinCard.className = `skin-card`;
-                    skinCard.style.transform = `rotate(${getRandomRotation()}deg)`;
-                    skinCard.style.zIndex = getRandomZIndex();
-                    // Add slight margin adjustments to encourage overlap
-                    skinCard.style.marginLeft = `${(Math.random() * 10) - 5}px`; // -5px to +5px
-                    skinCard.style.marginTop = `${(Math.random() * 10) - 5}px`;   // -5px to +5px
-
-                    // Set data attributes for the modal
-                    skinCard.dataset.champion = champ.name;
-                    skinCard.dataset.skin = champ.skin;
-                    skinCard.dataset.role = champ.role;
-                    skinCard.dataset.imageUrl = champ.imageUrl;
-
-                    skinCard.innerHTML = `
-                        <img src="${champ.imageUrl}" alt="${champ.skin} ${champ.name} Splash Art" onerror="this.onerror=null;this.src='https://placehold.co/400x600/666/e0e0e0?text=Image+Unavailable';">
-                        <div class="skin-info">
-                            <h3>${champ.name}</h3>
-                            <p>${champ.skin}</p>
-                        </div>
-                    `;
-                    skinGrid.appendChild(skinCard);
-
-                    // Add click listener to open modal
-                    skinCard.addEventListener('click', () => {
-                        modalImage.src = champ.imageUrl;
-                        modalImage.alt = `${champ.skin} ${champ.name} Splash Art`;
-                        modalChampionName.textContent = champ.name;
-                        modalSkinName.textContent = champ.skin;
-                        modalRole.textContent = `Role: ${champ.role}`;
-                        skinModal.classList.add('open');
-                    });
+            } else {
+                // Group champions by role
+                const roles = {};
+                filteredChampions.forEach(champ => {
+                    if (!roles[champ.role]) {
+                        roles[champ.role] = [];
+                    }
+                    roles[champ.role].push(champ);
                 });
-                roleSection.appendChild(skinGrid);
-                galleryContainer.appendChild(roleSection);
-            });
+
+                // Get a sorted list of roles
+                const sortedRoles = Object.keys(roles).sort((a, b) => {
+                    const order = ['Toplane', 'Jungle', 'Midlane', 'ADC', 'Support'];
+                    return order.indexOf(a) - order.indexOf(b);
+                });
+
+                // Iterate over roles and create sections
+                sortedRoles.forEach(role => {
+                    renderChampionSection(`${role} Champions`, roles[role]);
+                });
+            }
         }
 
         // Function to populate the enemy champion select dropdown
@@ -642,18 +676,26 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
         enemyChampionSelect.addEventListener('change', (event) => {
             const selectedEnemyChampion = event.target.value;
             if (selectedEnemyChampion) {
-                const recommendedPicks = matchupData[selectedEnemyChampion];
-                if (recommendedPicks && recommendedPicks.length > 0) {
-                    const filteredChampions = champions.filter(champ => 
-                        recommendedPicks.includes(champ.name)
-                    );
-                    renderGallery(filteredChampions);
-                    resetMatchupButton.style.display = 'block'; // Show the reset button
-                } else {
-                    galleryContainer.innerHTML = '<p class="text-center text-lg text-gray-400">No specific counter picks from your roster for this champion. Showing all your champions.</p>';
-                    renderGallery(champions); // Show all if no specific picks defined
-                    resetMatchupButton.style.display = 'block'; // Still show reset button
+                const matchup = matchupData[selectedEnemyChampion];
+                let normalPicks = [];
+                let hardCounterPicks = [];
+
+                if (matchup) {
+                    if (Array.isArray(matchup)) { // Old format: just an array of normal picks
+                        normalPicks = matchup;
+                    } else if (typeof matchup === 'object') { // New format: object with normal and hard_counter
+                        normalPicks = matchup.normal || [];
+                        hardCounterPicks = matchup.hard_counter || [];
+                    }
                 }
+
+                const combinedMatchupInfo = {
+                    normal: normalPicks,
+                    hard_counter: hardCounterPicks
+                };
+
+                renderGallery(champions, true, combinedMatchupInfo);
+                resetMatchupButton.style.display = 'block'; // Show the reset button
             } else {
                 renderGallery(champions); // Show all champions if "Select a Champion" is chosen
                 resetMatchupButton.style.display = 'none'; // Hide the reset button
@@ -667,6 +709,25 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
             resetMatchupButton.style.display = 'none'; // Hide the button
         });
 
+        // Event listener for closing the modal
+        closeModalButton.addEventListener('click', () => {
+            skinModal.classList.remove('open');
+        });
+
+        // Close modal if clicking outside the content
+        skinModal.addEventListener('click', (event) => {
+            if (event.target === skinModal) {
+                skinModal.classList.remove('open');
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && skinModal.classList.contains('open')) {
+                skinModal.classList.remove('open');
+            }
+        });
+
         // Render the gallery and populate the dropdown when the page loads
         window.onload = () => {
             populateEnemyChampionSelect();
@@ -675,4 +736,3 @@ Just copy this entire code block and save it as an `.html` file (e.g., `wildrift
     </script>
 </body>
 </html>
-```
