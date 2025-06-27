@@ -1,103 +1,483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Jungle Champs</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0a0a0a;
-      color: white;
-      padding: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wild Rift Champion Skins Gallery</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #100f2a, #1f1b4a, #15152b); /* Darker, more subtle gradient */
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* Add overall padding */
+            overflow-x: hidden; /* Prevent horizontal scroll due to rotations */
+        }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+        .container {
+            max-width: 1200px;
+            width: 100%; /* Use full width for responsiveness */
+            margin: 0 auto; /* Center the container */
+            padding: 1.5rem 0; /* Vertical padding only, let sections handle horizontal */
+            background-color: transparent; /* Remove container background for seamless look */
+            box-shadow: none; /* Remove container shadow */
+            backdrop-filter: none; /* Remove container blur */
+            -webkit-backdrop-filter: none;
+            border: none; /* Remove container border */
+            font-size: 50px;
+        }
 
-    .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
+        .container h4 {
+            font-size: 1.2rem; /* Smaller font for subtitle */
+            color: #bbb; /* Softer color for subtitle */
+            text-align: left;
+            margin-bottom: 2rem; /* More space below subtitle */
+            color: yellow;
+        }
 
-    .card {
-      background-color: #1a1a1a;
-      border-radius: 12px;
-      overflow: hidden;
-      width: 200px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.5);
-      transition: transform 0.3s ease;
-    }
+        h1 {
+            font-size: 2.8rem; /* Slightly larger title */
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem; /* More space below title */
+            background: linear-gradient(45deg, #a855f7, #6366f1, #ec4899); /* Vibrant purple to pink gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.6); /* Stronger glow */
+            letter-spacing: 0.05em; /* Add character spacing */
+        }
 
-    .card:hover {
-      transform: scale(1.05);
-    }
+        .role-section {
+            margin-bottom: 3rem; /* Spacing between role sections */
+            padding: 0 1rem; /* Slight horizontal padding for content within the section */
+        }
 
-    .card img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      display: block;
-    }
+        .role-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #60a5fa; /* A slightly deeper blue */
+            text-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3); /* Subtle separator */
+            display: inline-block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1; /* Ensure title is above potential background elements */
+        }
+        .role-title::before {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Position it at the bottom of the underline */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* Shorter line */
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent); /* Fading gradient line */
+            z-index: -1;
+            opacity: 0.7;
+        }
 
-    .card-name {
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      background-color: #222;
-    }
-  </style>
+
+        .skin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Adjusted min size for more cards */
+            gap: 0.5rem; /* Reduced gap for "next to each other" feel with overlaps */
+            justify-content: center;
+            align-items: stretch; /* Ensure cards stretch to fill grid area */
+            padding: 0.5rem 0; /* Slight vertical padding for the grid */
+            /* Removed grid specific properties that conflict with free placement */
+        }
+
+        .skin-card {
+            background-color: rgba(255, 255, 255, 0.08); /* Slightly less opaque card background */
+            border-radius: 0.75rem; /* Smaller border-radius */
+            overflow: hidden; /* Keep overflow hidden for images */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Softer, more diffused shadow */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out, z-index 0.1s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative; /* Allow for relative positioning for overlap */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Initial subtle border */
+            will-change: transform, box-shadow; /* Optimize animations */
+
+            /* Default to a simple rectangle - clip-path variations removed */
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .skin-card:hover {
+            transform: translateY(-8px) scale(1.02); /* Slight lift and scale, no Y-rotation for consistency */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.7); /* Stronger, colored glow */
+            border-color: rgba(168, 85, 247, 0.6); /* Border highlights on hover */
+            z-index: 10; /* Bring to front on hover */
+        }
+
+        .skin-card img {
+            width: 100%;
+            height: 200px; /* Adjusted height for more compact layout */
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+            filter: brightness(0.95); /* Less initial dimming */
+        }
+
+        .skin-card:hover img {
+            transform: scale(1.03); /* Slight zoom on image */
+            filter: brightness(1.1); /* Brighter on hover */
+        }
+
+        .skin-info {
+            padding: 0.75rem; /* Reduced padding */
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.45); /* Slightly darker info background */
+        }
+
+        .skin-info h3 {
+            font-size: 1.1rem; /* Slightly smaller font */
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .skin-info p {
+            font-size: 0.8rem; /* Slightly smaller font */
+            color: #bbb;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Slightly darker overlay */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #1a1a2e; /* Darker modal background */
+            padding: 2rem; /* More padding */
+            border-radius: 1.25rem; /* Larger border-radius */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); /* Stronger shadow */
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.15); /* Subtle modal border */
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem; /* More space below image */
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Shadow for modal image */
+        }
+
+        .modal-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .modal-info p {
+            font-size: 1.15rem;
+            color: #ccc;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2.2rem; /* Larger close button */
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .close-button:hover {
+            color: #ff3333; /* More intense red */
+            transform: scale(1.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+                margin-bottom: 2rem;
+            }
+            .role-title {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+            .skin-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Further adjustment for smaller screens */
+                gap: 0.6rem; /* Even smaller gap */
+            }
+            .skin-card img {
+                height: 160px;
+            }
+            .skin-info h3 {
+                font-size: 1rem;
+            }
+            .skin-info p {
+                font-size: 0.75rem;
+            }
+            .modal-content {
+                padding: 1.2rem;
+            }
+            .modal-info h3 {
+                font-size: 1.6rem;
+            }
+            .modal-info p {
+                font-size: 1rem;
+            }
+            .close-button {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+            .role-title {
+                font-size: 1.5rem;
+            }
+            .skin-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Smallest screen adjustment */
+                gap: 0.5rem;
+            }
+            .skin-card img {
+                height: 140px;
+            }
+            .skin-info h3 {
+                font-size: 0.9rem;
+            }
+            .skin-info p {
+                font-size: 0.7rem;
+            }
+            .modal-content {
+                padding: 0.8rem;
+            }
+            .modal-info h3 {
+                font-size: 1.4rem;
+            }
+            .modal-info p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>My Wild Rift Champion Roster</h1>
 
-  <h1>My Jungle Champs</h1>
+        <h4>Player: HAZE
+        <br>Server: EUW
+        <br>Main Role: Top 
+        <br>Secondary: ADC </h4>
+        
+        <div id="gallery-container">
+            <!-- Champion sections will be dynamically loaded here -->
+        </div>
+    </div>
 
-  <div class="card-container">
-    <div class="card">
-      <img src="https://preview.redd.it/arcade-viego-splash-art-v0-1kfvopdhbgwc1.jpeg?width=640&crop=smart&auto=webp&s=8f5a629a4cac000b084b53f0d8f8e19433f8c0dd" alt="Arcade Viego">
-      <div class="card-name">Arcade Viego</div>
+    <!-- Modal Structure -->
+    <div id="skin-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button" id="close-modal">&times;</button>
+            <img id="modal-image" src="" alt="Skin Splash Art">
+            <div class="modal-info">
+                <h3 id="modal-champion-name"></h3>
+                <p id="modal-skin-name"></p>
+                <p id="modal-role"></p>
+            </div>
+        </div>
     </div>
-    <div class="card">
-      <img src="https://cdnb.artstation.com/p/assets/images/images/025/599/985/large/alex-flores-morgana-coven-final-alexflores.jpg?1586312383" alt="Coven Morgana">
-      <div class="card-name">Coven Morgana</div>
-    </div>
-    <div class="card">
-      <img src="https://i.pinimg.com/736x/62/0e/fd/620efd8958e32abc4bf70012fbde1d93.jpg" alt="Vandal Gragas">
-      <div class="card-name">Vandal Gragas</div>
-    </div>
-    <div class="card">
-      <img src="https://preview.redd.it/xcvizwxpkd491.jpg?auto=webp&s=c72f3ab4076c17ab443c6f0bc079cc80c96401f5" alt="Hexplorer Shyvanna">
-      <div class="card-name">Hexplorer Shyvanna</div>
-    </div>
-    <div class="card">
-      <img src="https://i.imgur.com/a2LfSjf.jpg" alt="Dark Star Kha'Zix">
-      <div class="card-name">Dark Star Kha'Zix</div>
-    </div>
-    <div class="card">
-      <img src="https://cdna.artstation.com/p/assets/images/images/039/755/068/large/alex-flores-evelynncoven-final-alexflores2b2.jpg?1626841040" alt="Coven Evelynn">
-      <div class="card-name">Coven Evelynn</div>
-    </div>
-    <div class="card">
-      <img src="https://i.redd.it/i-repainted-heartsteel-kayns-china-chroma-splash-to-base-v0-ofg0vz6kpqzb1.png?width=3840&format=png&auto=webp&s=be8a80b1edc53badecf6b9ceb5cd4f6cf0146801" alt="Heartsteel Kayn">
-      <div class="card-name">Heartsteel Kayn</div>
-    </div>
-    <div class="card">
-      <img src="https://www.mobafire.com/images/champion/skins/landscape/vi-arcane-brawler-762x.jpg" alt="PROJECT Vi">
-      <div class="card-name">PROJECT Vi</div>
-    </div>
-  </div>
 
-  <h1>Sometimes i Q</h1>
-  <div class="card-container">
-  <div class="card">
-      <img src="https://i.redd.it/l6cjyhlndz181.png" alt="PROJECT Vi">
-      <div class="card-name">Master YI</div>
-    </div>
-  </div>
+    <script>
+        // Array of champion skins with their details
+        // IMPORTANT: Replace the 'imageUrl' with your actual splash art links.
+        // For best results, download the high-resolution splash arts and host them.
+        const champions = [
+            // Toplane
+            { role: 'Toplane', name: 'Gwen', skin: 'Stargazer', imageUrl: 'https://i.redd.it/r3wkx9h9qyqd1.png'},
+            { role: 'Toplane', name: 'Riven', skin: 'Spirit Blossom', imageUrl: 'https://c4.wallpaperflare.com/wallpaper/264/117/292/league-of-legends-spirit-blossom-riven-league-of-legends-riven-pc-gaming-hd-wallpaper-preview.jpg'},
+            { role: 'Toplane', name: 'Kayle', skin: 'PsyOps', imageUrl: 'https://turbosmurfs.gg/storage/splash/Kayle_15.jpg'},
+            { role: 'Toplane', name: 'Kennen', skin: 'Super Kennen', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/kennen/skins/skin07/images/kennen_splash_centered_7.jpg'},
+            { role: 'Toplane', name: 'Camille', skin: 'Stargazer', imageUrl: 'https://i.redd.it/r9dey83x3rs61.jpg'},
+            { role: 'Toplane', name: 'Jax', skin: 'Stargazer', imageUrl: 'https://i.redd.it/stargazer-jax-3d-model-wild-rift-rumor-legendary-v0-oesfuyt87zlb1.jpg?width=1918&format=pjpg&auto=webp&s=5f9379d341b11afdabb245c551cc5bcffa6316fe'}, // Placeholder for local file
+            { role: 'Toplane', name: 'Irelia', skin: 'Divine Sword', imageUrl: 'https://cdna.artstation.com/p/assets/images/images/012/706/196/large/bo-chen-irelia-1920pix.jpg?1536109325'},
+            { role: 'Toplane', name: 'Akali', skin: 'K/DA', imageUrl: 'https://i.pinimg.com/originals/e5/f0/07/e5f007778c849bf1e28820ed0e30d0d9.jpg'},
+
+            // Jungle
+            { role: 'Jungle', name: 'Kayn', skin: 'Heartsteel', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/kayn/skins/skin20/images/kayn_splash_centered_20.jpg'},
+            { role: 'Jungle', name: 'Evelynn', skin: 'Coven', imageUrl: 'https://cdna.artstation.com/p/assets/images/images/039/755/068/large/alex-flores-evelynncoven-final-alexflores2b2.jpg?1626841040'},
+            { role: 'Jungle', name: 'Morgana', skin: 'Coven', imageUrl: 'https://cdnb.artstation.com/p/assets/images/images/025/599/985/large/alex-flores-morgana-coven-final-alexflores.jpg?1586312383'},
+            { role: 'Jungle', name: 'Wukong', skin: 'Jade Dragon', imageUrl: 'https://i.redd.it/y0drjx433tk71.jpg'},
+            { role: 'Jungle', name: 'Xin Zhao', skin: 'Cosmic Defender', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/xinzhao/skins/skin20/images/xinzhao_splash_centered_20.jpg'},
+            { role: 'Jungle', name: 'Kha\'Zix', skin: 'Dark Star', imageUrl: 'https://turbosmurfs.gg/storage/splash/Khazix_4.jpg'},
+            { role: 'Jungle', name: 'Shyvanna', skin: 'Immortal Journey', imageUrl: 'https://preview.redd.it/immortal-journey-shyvana-ruby-chroma-splash-art-v0-6lotfzodf5ce1.jpeg?auto=webp&s=d56ad72d623f4251d887b69689cc33766be585e2'},
+            { role: 'Jungle', name: 'Viego', skin: 'Arcade', imageUrl: 'https://preview.redd.it/arcade-viego-splash-art-hd-v0-nn3dipudbgwc1.jpeg?auto=webp&s=a89e381c1df1a5d514528636330a62bcaaca8d78'},
+
+            // Midlane
+            { role: 'Midlane', name: 'Zed', skin: 'Galaxy Slayer', imageUrl: 'https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/zed/skins/skin13/images/zed_splash_centered_13.jpg'},
+            { role: 'Midlane', name: 'Orianna', skin: 'Weather Entity', imageUrl: 'https://preview.redd.it/weather-entity-orianna-v0-ops5mbch07we1.png?auto=webp&s=17b8dd9a8ceca54a0f92073e283bcbfe3619093b'},
+            { role: 'Midlane', name: 'Yone', skin: 'Spirit Blossom', imageUrl: 'https://cdnb.artstation.com/p/assets/images/images/028/948/949/large/bo-chen-spirit-blossom-yone-final1920-pix.jpg?1596007358'},
+            { role: 'Midlane', name: 'Ahri', skin: 'Spirit Blossom', imageUrl: 'https://images.steamusercontent.com/ugc/2026100532603250184/F6927A9FEB70B1F44142484DE253E2ABB51094E6/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'},
+            { role: 'Midlane', name: 'Katarina', skin: 'Battle Academia', imageUrl: 'https://turbosmurfs.gg/storage/splash/Katarina_12.jpg'},
+            { role: 'Midlane', name: 'Teemo', skin: 'Battle Bunny Aurora', imageUrl: 'https://www.mobafire.com/images/champion/skins/landscape/aurora-battle-bunny-762x.jpg'}, // Changed from Spirit Blossom Teemo
+            { role: 'Midlane', name: 'Zoe', skin: 'Star Guardian', imageUrl: 'https://r2.rankedkings.com/lol/splashes/142009.jpg'},
+            { role: 'Midlane', name: 'Yasuo', skin: 'Soulfighter', imageUrl: 'https://cdnb.artstation.com/p/assets/images/images/065/371/009/large/envar-studio-wildrift-soul-fighter-yasuo-final.jpg?1690213997'}, // Replaced Zyra with Yasuo
+
+            // ADC
+            { role: 'ADC', name: 'Varus', skin: 'Fiend Queller', imageUrl: 'https://i.redd.it/fiend-queller-varus-splash-art-chroma-splash-art-wild-rift-v0-ix4lbk04m3nd1.jpg?width=2000&format=pjpg&auto=webp&s=bab9d7c4c4aff9388b93a68811339dae30724553'},
+            { role: 'ADC', name: 'Kai\'Sa', skin: 'Lagoon', imageUrl: 'https://turbosmurfs.gg/storage/splash/Kaisa_29.jpg'},
+            { role: 'ADC', name: 'Tristana', skin: 'Dragon Trainer', imageUrl: 'https://wiki.leagueoflegends.com/en-us/images/Tristana_DragonTrainerSkin.jpg?9e9b1'},
+            { role: 'ADC', name: 'Ashe', skin: 'High Noon', imageUrl: 'https://turbosmurfs.gg/storage/splash/Ashe_17.jpg'},
+            { role: 'ADC', name: 'Samira', skin: 'Soulfighter', imageUrl: 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Samira_30.jpg'},
+            { role: 'ADC', name: 'Ezreal', skin: 'Battle Academia', imageUrl: 'https://turbosmurfs.gg/storage/splash/Ezreal_21.jpg'}, // Changed from Frosted Ezreal
+            { role: 'ADC', name: 'Vayne', skin: 'Sentinel', imageUrl: 'https://r2.rankedkings.com/lol/splashes/67025.jpg'},
+            { role: 'ADC', name: 'Jhin', skin: 'Blood Moon', imageUrl: 'https://preview.redd.it/6ewt085xd7131.jpg?auto=webp&s=01fbb7d4db7699e59ed0843eb49321b79320fbe9'},
+
+            // Support
+            { role: 'Support', name: 'Pyke', skin: 'Sand Wraith', imageUrl: 'https://r2.rankedkings.com/lol/splashes/555001.jpg'},
+            { role: 'Support', name: 'Karma', skin: 'Dawnbringer', imageUrl: 'https://www.riotgames.com/darkroom/1000/d8b51b2811cd8adc74b21cd14cbd3bee:5d689f36d8a785e81e1196a151b9c09c/00-karma-header.png'},
+            { role: 'Support', name: 'Thresh', skin: 'Spirit Blossom', imageUrl: 'https://turbosmurfs.gg/storage/splash/Thresh_17.jpg'},
+            { role: 'Support', name: 'Zyra', skin: 'Coven', imageUrl: 'https://turbosmurfs.gg/storage/splash/Zyra_5.jpg'} // Replaced Sett with Coven Zyra
+        ];
+
+        const galleryContainer = document.getElementById('gallery-container');
+        const skinModal = document.getElementById('skin-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalChampionName = document.getElementById('modal-champion-name');
+        const modalSkinName = document.getElementById('modal-skin-name');
+        const modalRole = document.getElementById('modal-role');
+        const closeModalButton = document.getElementById('close-modal');
+
+        // Function to generate a random rotation degree
+        function getRandomRotation() {
+            return (Math.random() * 8) - 4; // Between -4 and +4 degrees
+        }
+
+        // Function to generate a random Z-index to control overlap order
+        function getRandomZIndex() {
+            return Math.floor(Math.random() * 5); // 0 to 4
+        }
+
+        // Function to render the gallery
+        function renderGallery() {
+            // Group champions by role
+            const roles = {};
+            champions.forEach(champ => {
+                if (!roles[champ.role]) {
+                    roles[champ.role] = [];
+                }
+                roles[champ.role].push(champ);
+            });
+
+            // Iterate over roles and create sections
+            for (const role in roles) {
+                const roleSection = document.createElement('div');
+                roleSection.className = 'role-section';
+
+                const roleTitle = document.createElement('h2');
+                roleTitle.className = 'role-title';
+                roleTitle.textContent = role + ' Champions';
+                roleSection.appendChild(roleTitle);
+
+                const skinGrid = document.createElement('div');
+                skinGrid.className = 'skin-grid';
+
+                roles[role].forEach(champ => {
+                    const skinCard = document.createElement('div');
+                    // Apply random rotation and z-index directly via style
+                    skinCard.className = `skin-card`;
+                    skinCard.style.transform = `rotate(${getRandomRotation()}deg)`;
+                    skinCard.style.zIndex = getRandomZIndex();
+                    // Add slight margin adjustments to encourage overlap
+                    skinCard.style.marginLeft = `${(Math.random() * 10) - 5}px`; // -5px to +5px
+                    skinCard.style.marginTop = `${(Math.random() * 10) - 5}px`;   // -5px to +5px
+
+                    // Set data attributes for the modal
+                    skinCard.dataset.champion = champ.name;
+                    skinCard.dataset.skin = champ.skin;
+                    skinCard.dataset.role = champ.role;
+                    skinCard.dataset.imageUrl = champ.imageUrl;
+
+                    skinCard.innerHTML = `
+                        <img src="${champ.imageUrl}" alt="${champ.skin} ${champ.name} Splash Art" onerror="this.onerror=null;this.src='https://placehold.co/400x600/666/e0e0e0?text=Image+Unavailable';">
+                        <div class="skin-info">
+                            <h3>${champ.name}</h3>
+                            <p>${champ.skin}</p>
+                        </div>
+                    `;
+                    skinGrid.appendChild(skinCard);
+
+                    // Add click listener to open modal
+                    skinCard.addEventListener('click', () => {
+                        modalImage.src = champ.imageUrl;
+                        modalImage.alt = `${champ.skin} ${champ.name} Splash Art`;
+                        modalChampionName.textContent = champ.name;
+                        modalSkinName.textContent = champ.skin;
+                        modalRole.textContent = `Role: ${champ.role}`;
+                        skinModal.classList.add('open');
+                    });
+                });
+                roleSection.appendChild(skinGrid);
+                galleryContainer.appendChild(roleSection);
+            }
+        }
+
+        // Event listener to close the modal
+        closeModalButton.addEventListener('click', () => {
+            skinModal.classList.remove('open');
+        });
+
+        // Close modal when clicking outside the content
+        skinModal.addEventListener('click', (event) => {
+            if (event.target === skinModal) {
+                skinModal.classList.remove('open');
+            }
+        });
+
+        // Render the gallery when the page loads
+        window.onload = renderGallery;
+    </script>
 </body>
 </html>
